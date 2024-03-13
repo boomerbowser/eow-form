@@ -15,23 +15,22 @@ import { pageData } from "./pageData/rdData";
 import AddIcon from "@mui/icons-material/Add";
 
 export default function RD() {
-    const [file, setFile] = useState(null); 
-    const [genreValue, setGenreValue] = useState('');
-    const [langValue, setLangValue] = useState('');
+    const [inputValues, setInputValues] = useState({
+      releaseName: '',
+      recordLabel: '',
+      genre: '',
+      language: '',
+      artFile: null
+    });
 
     const genres = Object.values(pageData.genres);
     const langs = Object.values(pageData.languages);
 
-    const handleGenreChange = (e) => {
-      setGenreValue(e.target.value)
+    const handleChange = (e) => {
+      const name = e.target.name;
+      const value = e.target.value;
+      setInputValues( values => ({ ...values, [name]: value }) );
     };
-    const handleLangChange = (e) => {
-      setLangValue(e.target.value)
-    }
-
-    const handleFileChange = (newFile) => {
-      setFile(newFile);
-    }
 
     return (
         <>
@@ -41,12 +40,12 @@ export default function RD() {
                 <Typography p={2} pt={4} variant={'h2'} textAlign={'center'} >Release Details</Typography>
                 
                 <Container maxWidth={'sm'}>
-                  <Stack gap={4} direction={"column"} justifyContent={'center'}>
-                    <TextField id={'release-name'} label={'Release Title'} />
-                    <TextField id={'label-name'} label={'Label'} />
+                  <Box component={'form'} encType={'multipart/form-data'} method={'post'} name={'release-details-form'} display={'flex'} gap={4} flexDirection={"column"} justifyContent={'center'}>
+                    <TextField id={'release-name'} name={'releaseName'} value={inputValues.releaseName || ''} onChange={handleChange} label={'Release Title'} />
+                    <TextField id={'label-name'} name={'recordLabel'} value={inputValues.recordLabel || ''} onChange={handleChange} label={'Label'} />
                     <FormControl>
                       <InputLabel id={'genre'} >Genre</InputLabel>  
-                      <Select id={'genre'} value={genreValue} onChange={handleGenreChange} label={'Genre'} >
+                      <Select name={'genre'} id={'genre'} value={inputValues.genre || ''} onChange={handleChange} label={'Genre'} >
                         {genres.map( (genre) => (
                           <MenuItem key={genre} value={genre}>
                             {genre}
@@ -56,7 +55,7 @@ export default function RD() {
                     </FormControl>
                     <FormControl>
                       <InputLabel id={'language'} >What language is your release in?</InputLabel>
-                      <Select id={'language'} value={langValue} onChange={handleLangChange} label={'What language is your release in?'} >
+                      <Select name={'language'} id={'language'} value={inputValues.language || ''} onChange={handleChange} label={'What language is your release in?'} >
                         {langs.map( (lang) => (
                           <MenuItem key={lang} value={lang}>
                             {lang}
@@ -64,12 +63,12 @@ export default function RD() {
                         ) )}  
                       </Select>
                     </FormControl>
-                  </Stack>
+                  </Box>
                 </Container>
                 <Typography textAlign={'center'} pt={3} gutterBottom variant={'h4'}>Cover Art</Typography>
                 <Container maxWidth={'md'} sx={{ display: 'flex', flexDirection: 'row' }} >
-                  <Box sx={{ width: '15rem', minHeight: '15rem', position: 'relative', justifySelf: 'flex-start' }}>
-                    <MuiFileInput inputProps={{ sx: { width: '15rem', height: '15rem' } }} value={file} onChange={handleFileChange} />
+                  <Box component={'form'} sx={{ width: '15rem', minHeight: '15rem', position: 'relative', justifySelf: 'flex-start' }}>
+                    <MuiFileInput name={'artFile'} inputProps={{ sx: { width: '15rem', height: '15rem' } }} value={inputValues.artFile || null} onChange={handleChange} />
                     <AddIcon fontSize="large" sx={{ position: 'absolute', top: 125, bottom: 0, left: 130, right: 0 }}/>
                   </Box>
                   <div style={{ flexGrow: 1 }}>

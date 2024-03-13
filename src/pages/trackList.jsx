@@ -27,7 +27,7 @@ export default function TL() {
         <Header step={1} />
         <Container maxWidth={'xl'} sx={{ minHeight: '80svh', pb: 6 }}>
           <Stack direction={'column'} gap={2} justifyContent={'center'}>
-            <Typography variant={'h2'} textAlign={'center'} gutterBottom >Track List</Typography>
+            <Typography pt={3} variant={'h2'} textAlign={'center'} gutterBottom >Track List</Typography>
             <Container maxWidth={'md'}>
                 <Box width={'100%'} height={'10rem'}>
                     <input hidden multiple type={'file'} ref={inputRef} onChange={handleChange} />
